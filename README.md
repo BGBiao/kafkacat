@@ -290,3 +290,41 @@ Partition: 0    Offset: 2
 --
 % Reached end of topic test [0] at offset 3
 ```
+
+## kafkacat 在centos系列的使用
+
+```
+$ docker pull bgbiao/kafkacat
+
+# 从标准输入生产数据
+$ docker run --rm bgbiao/kafkacat kafkacat -b kafka-broker:9092 -t test-biao -P <<EOF
+> ssabdkgjf
+> asfgnh
+> wertnh
+> waer
+> awegrtn
+> 2020-04-26
+> end time
+> EOF
+  
+# 从指定topic接收数据
+$ docker run -it --rm bgbiao/kafkacat kafkacat -b kafka-broker:9092 -t test-biao -C -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n'
+
+Key (-1 bytes):
+Value (13 bytes): test kafkacat
+Partition: 0	Offset: 11
+--
+% Reached end of topic test-biao [0] at offset 12
+
+Key (-1 bytes):
+Value (18 bytes): 2020-04-26 endtime
+Partition: 1	Offset: 8
+--
+% Reached end of topic test-biao [1] at offset 9
+
+Key (-1 bytes):
+Value (7 bytes): overlay
+Partition: 2	Offset: 6
+--
+% Reached end of topic test-biao [2] at offset 7
+```

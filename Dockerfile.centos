@@ -1,0 +1,11 @@
+FROM centos:7.5.1804 as kafkacat-build
+MAINTAINER "weichuangxxb@gmail.com <BGBiao> by https://bgbiao.top"
+RUN yum clean all && yum install librdkafka librdkafka-devel gcc make -y && mkdir -p /opt/
+COPY . /opt/
+RUN pushd /opt/ && ./configure && make && make install 
+
+FROM centos:7.5.1804
+COPY --from=kafkacat-build  /usr/local/bin/kafkacat /usr/local/bin/kafkacat
+RUN yum clean all && yum install librdkafka-devel -y && chmod a+x /usr/local/bin/kafkacat
+CMD ["/usr/local/bin/kafkacat"]
+ 
